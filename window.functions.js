@@ -3,23 +3,22 @@
 // Maintainers - Joeun Ha, Jeongik Park
 // (c) 2017 Marpple. MIT Licensed.
 (function(w) {
-  var _slice = Array.prototype.slice;
-
   w._identity = w._idtt = function(v) { return v };
   w._noop = function() {};
   w._keys = function(obj) { return obj ? Object.keys(obj) : [] };
   w._mr = function() { return arguments._mr = true, arguments };
 
   w._pipe = function() {
-    var i = -1, fs = _slice.call(arguments, 0), len = fs.length;
+    var fs = arguments, len = fs.length;
     return function(res) {
+      var i = -1;
       while (++i < len) res = res._mr ? fs[i].apply(null, res) : fs[i](res);
       return res;
     }
   };
 
   w._go = function() {
-    var i = -1, fs = _slice.call(arguments, 1), len = fs.length, res = arguments[0];
+    var i = 0, fs = arguments, len = fs.length, res = arguments[0];
     while (++i < len) res = res._mr ? fs[i].apply(null, res) : fs[i](res);
     return res;
   };
