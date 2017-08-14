@@ -12,14 +12,14 @@
     var fs = arguments, len = fs.length;
     return function(res) {
       var i = -1;
-      while (++i < len) res = res._mr ? fs[i].apply(null, res) : fs[i](res);
+      while (++i < len) res = res && res._mr ? fs[i].apply(null, res) : fs[i](res);
       return res;
     }
   };
 
   w._go = function() {
     var i = 0, fs = arguments, len = fs.length, res = arguments[0];
-    while (++i < len) res = res._mr ? fs[i].apply(null, res) : fs[i](res);
+    while (++i < len) res = res && res._mr ? fs[i].apply(null, res) : fs[i](res);
     return res;
   };
 
