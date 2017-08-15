@@ -1,5 +1,5 @@
 # window.functions.js
-window.functions.js는 최소한의 기능만을 지원하는 대신 가장 좋은 성능을 가진 함수형 자바스크립트 라이브러리입니다. Partial.js와 거의 동일한 컨셉을 가지고 있지만, 보조 함수의 인자가 하나만 들어오거나, 가장 빠르거나 등의 특징을 가지고 있어서 이만의 쓰임새가 있습니다. 더 많은 기능이 필요하면 [Partial.js](https://marpple.github.io/partial.js/)와 함께 사용하면 좋습니다.
+window.functions.js는 최소한의 기능만을 지원하는 대신 가장 좋은 성능을 가진 함수형 자바스크립트 라이브러리입니다. Partial.js와 거의 동일한 컨셉을 가지고 있지만, 보조 함수의 인자가 하나만 들어오거나, 가장 간결하거나 등의 특징을 가지고 있어서 이만의 쓰임새가 있습니다. 더 많은 기능이 필요하면 [Partial.js](https://marpple.github.io/partial.js/)와 함께 사용하면 좋습니다.
 
 ## Pipe
 
