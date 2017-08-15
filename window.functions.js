@@ -23,6 +23,15 @@
     return res;
   };
 
+  w._tap = function() {
+    var pipe = _pipe.apply(null, arguments);
+    return function() {
+      var a = arguments;
+      pipe(a = a.length > 1 ? (a._mr = true && a) : a[0]);
+      return a;
+    }
+  };
+
   w._each = function f(arr, iter) {
     if (!iter) return function(arr2) { return f(arr2, arr) };
     var i = -1, len = arr && arr.length;
