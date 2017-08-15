@@ -71,12 +71,12 @@ _go(10,
 
 ## List, Object
 
-### _each
+### _each, _oeach
 `_each(list, iteratee)` 리스트를 끝까지 순회하며 함수를 실행합니다.
 ```javascript
 _each([1, 2, 3], alert);
 // alert 함수가 각 번호에 맞춰 실행됩니다.
-_each({one: 1, two: 2, three: 3}, alert)
+_oeach({one: 1, two: 2, three: 3}, alert)
 // alert 함수가 각 번호 값에 맞춰 실행됩니다.
 ```
 
