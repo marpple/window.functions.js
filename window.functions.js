@@ -27,8 +27,7 @@
     var pipe = _pipe.apply(null, arguments);
     return function() {
       var a = arguments;
-      pipe(a = a.length > 1 ? (a._mr = true && a) : a[0]);
-      return a;
+      return pipe(a = a.length > 1 ? (a._mr = true && a) : a[0]), a;
     }
   };
 
@@ -103,15 +102,15 @@
   };
 
   w._reduce = function f(arr, iter, init) {
-    if (typeof arr == "function") return function(arr2){ return f(arr2, arr, iter) };
-    var i = -1, len = arr && arr.length, res = init || arr[++i];
+    if (typeof arr == "function") return function(arr2) { return f(arr2, arr, iter) };
+    var i = -1, len = arr && arr.length, res = init === undefined ? arr[++i] : _clone(init);
     while (++i < len) res = iter(res, arr[i]);
     return res;
   };
 
   w._oreduce = function f(obj, iter, init) {
-    if (typeof obj == "function") return function(obj2){ return f(obj2, obj, iter) };
-    var i = -1, keys = _keys(obj), len = keys.length, res = init || obj[keys[++i]];
+    if (typeof obj == "function") return function(obj2) { return f(obj2, obj, iter) };
+    var i = -1, keys = _keys(obj), len = keys.length, res = init === undefined ? obj[keys[++i]] : _clone(init);
     while (++i < len) res = iter(res, obj[keys[i]]);
     return res;
   };
@@ -128,12 +127,24 @@
     while (++i < len) if (iter(obj[keys[i]])) return obj[keys[i]];
   };
 
-  w._range = function(start, stop, step) {
-    if (stop == null) { stop = start || 0; start = 0; }
-    step = step || 1;
-    var length = Math.max(Math.ceil((stop - start) / step), 0), range = Array(length);
-    for (var idx = 0; idx < length; idx++, start += step) range[idx] = start;
-    return range;
+  w._has = function(obj, key) {
+    return obj != null && Object.hasOwnProperty.call(obj, key);
   };
 
+  function bexdf(setter, args) {
+    for (var i = 1, len = args.length, obj1 = args[0]; i < len; i++)
+      if (obj1 && args[i]) setter(obj1, args[i]);
+    if (obj1) delete obj1._memoize;
+    return obj1;
+  }
+  function setter(r, s) { for (var key in s) r[key] = s[key]; }
+  function dsetter(r, s) { for (var key in s) if (!_has(r, key)) r[key] = s[key]; }
+
+  w._extend = function() { return bexdf(setter, arguments); };
+  w._defaults = function() { return bexdf(dsetter, arguments); };
+
+  w._clone = function(obj) {
+    if (!obj || typeof obj != 'object') return obj;
+    return Array.isArray(obj) ? obj.slice() : _extend({}, obj);
+  };
 })(typeof global == 'object' ? global : window);
