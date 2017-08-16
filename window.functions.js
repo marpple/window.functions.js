@@ -76,28 +76,28 @@
   w._filter = function f(arr, iter) {
     if (!iter) return function(arr2) { return f(arr2, arr) };
     var i = -1, len = arr && arr.length, res = [];
-    while (++i < len) if (iter(arr[i])) res[i].push(arr[i]);
+    while (++i < len) if (iter(arr[i])) res.push(arr[i]);
     return res;
   };
 
   w._ofilter = function f(obj, iter) {
     if (!iter) return function(obj2) { return f(obj2, obj) };
     var i = -1, keys = _keys(obj), len = keys.length, res = [];
-    while (++i < len) if (iter(obj[keys[i]])) res[i].push(obj[keys[i]]);
+    while (++i < len) if (iter(obj[keys[i]])) res.push(obj[keys[i]]);
     return res;
   };
 
   w._reject = function f(arr, iter) {
     if (!iter) return function(arr2) { return f(arr2, arr) };
     var i = -1, len = arr && arr.length, res = [];
-    while (++i < len) if (!iter(arr[i])) res[i].push(arr[i]);
+    while (++i < len) if (!iter(arr[i])) res.push(arr[i]);
     return res;
   };
 
   w._oreject = function f(obj, iter) {
     if (!iter) return function(obj2) { return f(obj2, obj) };
     var i = -1, keys = _keys(obj), len = keys.length, res = [];
-    while (++i < len) if (!iter(obj[keys[i]])) res[i].push(obj[keys[i]]);
+    while (++i < len) if (!iter(obj[keys[i]])) res.push(obj[keys[i]]);
     return res;
   };
 
