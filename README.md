@@ -34,6 +34,22 @@ _go(10, // 첫 번째 함수에서 사용할 인자
   // 50
   function(a) { return a + 10 }); // 연속 실행할 함수 3
   // 60
+  
+var users = [
+  { id: 1, name: "ID", age: 32 },
+  { id: 2, name: "HA", age: 25 },
+  { id: 3, name: "BJ", age: 32 },
+  { id: 4, name: "PJ", age: 28 },
+  { id: 5, name: "JE", age: 27 },
+  { id: 6, name: "JM", age: 32 },
+  { id: 7, name: "JI", age: 31 }
+];
+
+_go(users,
+  _filter(function(u) { return u.age < 30; }),
+  _map(function(u) { return u.name }),
+  console.log);
+// ["HA", "PJ", "JE"]
 ```
 
 ### _mr
@@ -152,4 +168,33 @@ function _identity(v) { return v };
 ### _noop
 ```javascript
 function _noop() {};
+```
+
+### _clone
+`_clone(object)` 얕은 복사로 객체를 복제합니다. 중첩 객체의 경우에는 복제하지 않고 참조합니다.
+```javascript
+_clone({name: 'moe'});
+// {name: 'moe'};
+```
+
+### _has
+`_has(object, key)` 객체에 특정 키가 존재하는지 확인합니다.
+```javascript
+_has({a: 1, b: 2, c: 3}, "b");
+// true
+```
+
+### _extend
+`_extend(destination, *sources)` __sources__에 해당하는 객체들의 프로퍼티를 얕게 복사해서 __destination__에 해당하는 객체에 붙여 객체를 확장합니다. 
+```javascript
+_extend({name: 'moe'}, {age: 50});
+// {name: 'moe', age: 50}
+```
+
+### _defaults
+`_defaults(object, *defaults)` 객체의 프로퍼티 중 값이 `undefined`인 프로퍼티의 값을 __defaults__객체의 값으로 채웁니다.
+```javascript
+var iceCream = {flavor: "chocolate"};
+_defaults(iceCream, {flavor: "vanilla", sprinkles: "lots"});
+// {flavor: "chocolate", sprinkles: "lots"}
 ```
