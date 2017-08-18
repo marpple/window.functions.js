@@ -92,7 +92,7 @@ _go(10,
 ```javascript
 _each([1, 2, 3], alert);
 // alert 함수가 각 번호에 맞춰 실행됩니다.
-_oeach({one: 1, two: 2, three: 3}, alert)
+_each({one: 1, two: 2, three: 3}, alert)
 // alert 함수가 각 번호 값에 맞춰 실행됩니다.
 ```
 
@@ -101,7 +101,7 @@ _oeach({one: 1, two: 2, three: 3}, alert)
 ```javascript
 _map([1,2,3], function(num) { return num * 3; });
 // [3, 6, 9]
-_omap({one: 1, two: 2, three: 3}, function(num) { return num * 3; });
+_map({one: 1, two: 2, three: 3}, function(num) { return num * 3; });
 // [3, 6, 9]
 ```
 
@@ -125,7 +125,7 @@ console.log(odds); // [1, 3, 5]
 _reduce([1, 2, 3], function(memo, num) { return memo + num; }, 0);
 // 6
 
-_oreduce({one: 1, two: 2, three: 3}, function(memo, num) { return memo + num; }, 0);
+_reduce({one: 1, two: 2, three: 3}, function(memo, num) { return memo + num; }, 0);
 // 6
 ```
 
