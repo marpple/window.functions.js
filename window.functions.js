@@ -31,100 +31,75 @@
     }
   };
 
-  w._each = function f(arr, iter) {
-    if (!iter) return function(arr2) { return f(arr2, arr) };
-    var i = -1, len = arr && arr.length;
-    while (++i < len) iter(arr[i]);
-    return arr;
+  w._each = function f(data, iter) {
+    if (!iter) return function(data2) { return f(data2, data) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data);
+    if (keys && (len = keys.length))
+      while (++i < len) iter(data[keys[i]]);
+    else
+      while (++i < len) iter(data[i]);
+    return data;
   };
 
-  w._oeach = function f(obj, iter) {
-    if (!iter) return function(obj2) { return f(obj2, obj) };
-    var i = -1, keys = _keys(obj), len = keys.length;
-    while (++i < len) iter(obj[keys[i]]);
-    return obj;
-  };
-
-  w._map = function f(arr, iter) {
-    if (!iter) return function(arr2) { return f(arr2, arr) };
-    var i = -1, len = arr && arr.length, res = [];
-    while (++i < len) res[i] = iter(arr[i]);
+  w._map = function f(data, iter) {
+    if (!iter) return function(data2) { return f(data2, data) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data), res = [];
+    if (keys && (len = keys.length))
+      while (++i < len) res[i] = iter(data[keys[i]]);
+    else
+      while (++i < len) res[i] = iter(data[i]);
     return res;
   };
 
-  w._omap = function f(obj, iter) {
-    if (!iter) return function(obj2) { return f(obj2, obj) };
-    var i = -1, keys = _keys(obj), len = keys.length, res = [];
-    while (++i < len) res[i] = iter(obj[keys[i]]);
+  w._flatmap = w._mapcat = function f(data, iter) {
+    if (!iter) return function(data2) { return f(data2, data) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data), res = [], evd;
+
+    if (keys && (len = keys.length))
+      while (++i < len) Array.isArray(evd = iter(data[keys[i]])) ? res.push.apply(res, evd) : res.push(evd);
+    else
+      while (++i < len) Array.isArray(evd = iter(data[i])) ? res.push.apply(res, evd) : res.push(evd);
     return res;
   };
 
-  w._flatmap = w._mapcat = function f(arr, iter) {
-    if (!iter) return function(arr2) { return f(arr2, arr) };
-    var i = -1, len = arr && arr.length, res = [], evd;
-    while (++i < len) Array.isArray(evd = iter(arr[i])) ? res.push.apply(res, evd) : res.push(evd);
+  w._filter = function f(data, iter) {
+    if (!iter) return function(data2) { return f(data2, data) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data), res = [];
+    if (keys && (len = keys.length))
+      while (++i < len) { if (iter(data[keys[i]])) res.push(data[keys[i]]); }
+    else
+      while (++i < len) { if (iter(data[i])) res.push(data[i]); }
     return res;
   };
 
-  w._oflatmap = w._omapcat = function f(obj, iter) {
-    if (!iter) return function(obj2) { return f(obj2, obj) };
-    var i = -1, keys = _keys(obj), len = keys.length, res = [], evd;
-    while (++i < len) Array.isArray(evd = iter(obj[keys[i]])) ? res.push.apply(res, evd) : res.push(evd);
+  w._reject = function f(data, iter) {
+    if (!iter) return function(data2) { return f(data2, data) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data), res = [];
+    if (keys && (len = keys.length))
+      while (++i < len) { if (!iter(data[keys[i]])) res.push(data[keys[i]]); }
+    else
+      while (++i < len) { if (!iter(data[i])) res.push(data[i]); }
     return res;
   };
 
-  w._filter = function f(arr, iter) {
-    if (!iter) return function(arr2) { return f(arr2, arr) };
-    var i = -1, len = arr && arr.length, res = [];
-    while (++i < len) if (iter(arr[i])) res.push(arr[i]);
+  w._reduce = function f(data, iter, init) {
+    if (typeof data == "function") return function(data2) { return f(data2, data, iter) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data),
+      res = init === undefined ? data[keys ? keys[++i] : ++i] : _clone(init);
+    if (keys && (len = keys.length))
+      while (++i < len) res = iter(res, data[keys[i]]);
+    else
+      while (++i < len) res = iter(res, data[i]);
     return res;
   };
 
-  w._ofilter = function f(obj, iter) {
-    if (!iter) return function(obj2) { return f(obj2, obj) };
-    var i = -1, keys = _keys(obj), len = keys.length, res = [];
-    while (++i < len) if (iter(obj[keys[i]])) res.push(obj[keys[i]]);
-    return res;
-  };
-
-  w._reject = function f(arr, iter) {
-    if (!iter) return function(arr2) { return f(arr2, arr) };
-    var i = -1, len = arr && arr.length, res = [];
-    while (++i < len) if (!iter(arr[i])) res.push(arr[i]);
-    return res;
-  };
-
-  w._oreject = function f(obj, iter) {
-    if (!iter) return function(obj2) { return f(obj2, obj) };
-    var i = -1, keys = _keys(obj), len = keys.length, res = [];
-    while (++i < len) if (!iter(obj[keys[i]])) res.push(obj[keys[i]]);
-    return res;
-  };
-
-  w._reduce = function f(arr, iter, init) {
-    if (typeof arr == "function") return function(arr2) { return f(arr2, arr, iter) };
-    var i = -1, len = arr && arr.length, res = init === undefined ? arr[++i] : _clone(init);
-    while (++i < len) res = iter(res, arr[i]);
-    return res;
-  };
-
-  w._oreduce = function f(obj, iter, init) {
-    if (typeof obj == "function") return function(obj2) { return f(obj2, obj, iter) };
-    var i = -1, keys = _keys(obj), len = keys.length, res = init === undefined ? obj[keys[++i]] : _clone(init);
-    while (++i < len) res = iter(res, obj[keys[i]]);
-    return res;
-  };
-
-  w._find = function f(arr, iter) {
-    if (!iter) return function(arr2) { return f(arr2, arr) };
-    var i = -1, len = arr && arr.length;
-    while (++i < len) if (iter(arr[i])) return arr[i];
-  };
-
-  w._ofind = function f(obj, iter) {
-    if (!iter) return function(obj2) { return f(obj2, obj) };
-    var i = -1, keys = _keys(obj), len = keys.length;
-    while (++i < len) if (iter(obj[keys[i]])) return obj[keys[i]];
+  w._find = function f(data, iter) {
+    if (!iter) return function(arr2) { return f(arr2, data) };
+    var i = -1, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data);
+    if (keys && (len = keys.length))
+      while (++i < len) { if (iter(data[keys[i]])) return data[keys[i]]; }
+    else
+      while (++i < len) { if (iter(data[i])) return data[i]; }
   };
 
   w._has = function(obj, key) {
@@ -144,7 +119,6 @@
   w._defaults = function() { return bexdf(dsetter, arguments); };
 
   w._clone = function(obj) {
-    if (!obj || typeof obj != 'object') return obj;
-    return Array.isArray(obj) ? obj.slice() : _extend({}, obj);
+    return !obj || typeof obj != 'object' ? obj : Array.isArray(obj) ? obj.slice() : _extend({}, obj);
   };
 })(typeof global == 'object' ? global : window);
