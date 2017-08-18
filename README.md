@@ -101,7 +101,7 @@ _oeach({one: 1, two: 2, three: 3}, alert)
 ```javascript
 _map([1,2,3], function(num) { return num * 3; });
 // [3, 6, 9]
-_omap({one: 1, two: 2, three: 3}, function(num, key) { return num * 3; });
+_omap({one: 1, two: 2, three: 3}, function(num) { return num * 3; });
 // [3, 6, 9]
 ```
 
