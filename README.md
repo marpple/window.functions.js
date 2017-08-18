@@ -87,7 +87,7 @@ _go(10,
 
 ## List, Object
 
-### _each, _oeach
+### _each
 `_each(list, iteratee)` 리스트를 끝까지 순회하며 함수를 실행합니다.
 ```javascript
 _each([1, 2, 3], alert);
@@ -96,7 +96,7 @@ _each({one: 1, two: 2, three: 3}, alert)
 // alert 함수가 각 번호 값에 맞춰 실행됩니다.
 ```
 
-### _map, _omap
+### _map
 `_map(list, iteratee)` 리스트를 순회하며 주어진 함수로 새로운 배열을 생성합니다.
 ```javascript
 _map([1,2,3], function(num) { return num * 3; });
@@ -105,21 +105,21 @@ _map({one: 1, two: 2, three: 3}, function(num) { return num * 3; });
 // [3, 6, 9]
 ```
 
-### _filter, _ofilter
+### _filter
 `_filter(list, predicate)` 리스트의 내부 값을 관찰하여 predicate의 결과가 참인 값들을 배열로 반환합니다.
 ```javascript
 var evens = _filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; });
 console.log(evens); // [2, 4, 6]
 ```
 
-### _reject, _oreject
+### _reject
 `_reject(list, predicate)` 리스트를 순회하며 predicate의 결과가 참인 값들을 제외한 배열을 반환합니다.
 ```javascript
 var odds = _reject([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; });
 console.log(odds); // [1, 3, 5]
 ```
 
-### _reduce, _oreduce
+### _reduce
 `_reduce(list, iteratee, [memo])` `inject` 혹은 `foldl`라고 불리는 이 함수는 리스트를 순회하며 하나의 값을 추출합니다. `memo`는 옵션값이며 추출될 값의 초기값이 됩니다.
 ```javascript
 _reduce([1, 2, 3], function(memo, num) { return memo + num; }, 0);
@@ -129,7 +129,7 @@ _reduce({one: 1, two: 2, three: 3}, function(memo, num) { return memo + num; }, 
 // 6
 ```
 
-### _find, _ofind
+### _find
 `_find(list, predicate)` 리스트의 내부 값을 관찰하여 predicate의 결과가 참인 값을 반환합니다.
 ```javascript
 var even = _find([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; });
