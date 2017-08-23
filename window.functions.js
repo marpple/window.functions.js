@@ -6,20 +6,20 @@
   w._identity = w._idtt = function(v) { return v };
   w._noop = function() {};
   w._keys = function(obj) { return obj ? Object.keys(obj) : [] };
-  w._mr = function() { return arguments._mr = true, arguments };
+  w._mr = function() { return arguments.__mr = true, arguments };
 
   w._pipe = function() {
     var fs = arguments, len = fs.length;
     return function(res) {
       var i = -1;
-      while (++i < len) res = res && res._mr ? fs[i].apply(null, res) : fs[i](res);
+      while (++i < len) res = res && res.__mr ? fs[i].apply(null, res) : fs[i](res);
       return res;
     }
   };
 
   w._go = function() {
     var i = 0, fs = arguments, len = fs.length, res = arguments[0];
-    while (++i < len) res = res && res._mr ? fs[i].apply(null, res) : fs[i](res);
+    while (++i < len) res = res && res.__mr ? fs[i].apply(null, res) : fs[i](res);
     return res;
   };
 
@@ -27,7 +27,7 @@
     var pipe = _pipe.apply(null, arguments);
     return function() {
       var a = arguments;
-      return pipe(a = a.length > 1 ? (a._mr = true && a) : a[0]), a;
+      return pipe(a = a.length > 1 ? (a.__mr = true && a) : a[0]), a;
     }
   };
 
@@ -102,6 +102,24 @@
       while (++i < len) { if (iter(data[i])) return data[i]; }
   };
 
+  w._sum = function f(data, iter) {
+    if (!iter) {
+      if (typeof data == 'function') return function(arr2) { return f(arr2, data) };
+      iter = w._idtt;
+    }
+    var i = 0, len = data && data.length, keys = typeof len == 'number' ? null : _keys(data);
+    if (keys) len = keys.length;
+    if (len == 0) return;
+    if (keys) {
+      var res = iter(data[keys[0]]);
+      while (++i < len) res += iter(data[keys[i]]);
+    } else {
+      var res = iter(data[0]);
+      while (++i < len) res += iter(data[i]);
+    }
+    return res;
+  };
+
   w._has = function(obj, key) {
     return obj != null && Object.hasOwnProperty.call(obj, key);
   };
@@ -121,4 +139,16 @@
   w._clone = function(obj) {
     return !obj || typeof obj != 'object' ? obj : Array.isArray(obj) ? obj.slice() : _extend({}, obj);
   };
+
+  w._curryr = function(f) {
+    return function(b, a) {
+      return arguments.length == 2 ? f(b, a) : function(a) { return f(a, b) };
+    };
+  };
+  w._lt = w._curryr(function(a, b) { return a < b; });
+  w._lte = w._curryr(function(a, b) { return a <= b; });
+  w._gt = w._curryr(function(a, b) { return a > b; });
+  w._gte = w._curryr(function(a, b) { return a >= b; });
+  w._add = function(a, b) { return a + b; };
+  w._sub = function(a, b) { return a - b; };
 })(typeof global == 'object' ? global : window);
