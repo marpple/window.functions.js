@@ -147,7 +147,7 @@
   };
   w._lt = w._curryr(function(a, b) { return a < b; });
   w._lte = w._curryr(function(a, b) { return a <= b; });
-  w._gt = w._curryr(function(a, b) { return a > b; });``
+  w._gt = w._curryr(function(a, b) { return a > b; });
   w._gte = w._curryr(function(a, b) { return a >= b; });
   w._add = w._curryr(function(a, b) { return a + b; });
   w._sub = w._curryr(function(a, b) { return a - b; });
