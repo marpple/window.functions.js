@@ -136,6 +136,19 @@ var even = _find([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; });
 console.log(even); // 2
 ```
 
+### _sum
+`_sum(array, iteratee)` 배열의 내부 값에 `iteratee`를 적용한 값들을 더합니다.
+```javascript
+_sum([1, 2, 3], function(v) {
+  return v * 10;
+});
+// 60
+_sum(['a', 'b', 'c'], function(v) {
+  return v.toUpperCase();
+});
+// ABC
+```
+
 ## Etc
 
 ### _keys
